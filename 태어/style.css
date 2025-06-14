@@ -1,0 +1,92 @@
+body {
+  margin: 0;
+  background-color: #262626;
+  color: #eaeaea;
+  font-family: 'Pretendard', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+  text-align: center;
+}
+
+.hidden {
+  display: none;
+}
+
+button {
+  background: none;
+  border: none;
+  border-bottom: 2px solid #eaeaea;
+  color: #eaeaea;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  margin-top: 2rem;
+}
+/* 기존 button 스타일 아래에 추가
+button {
+  position: relative;
+  background: none;
+  color: #eaeaea;
+  border: none;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 20px;
+  padding: 10px 20px;
+}
+
+/* 밑줄 생성용 가상 요소 
+button::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0%;
+  height: 2px;
+  background-color: #eaeaea;
+  transition: width 0.3s ease;
+}
+
+/* hover 시 밑줄 확장 
+button:hover::after {
+  width: 100%;
+} */
+
+#startScreen h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+#result img {
+  width: 200px;
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+#countryName {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+#description {
+  white-space: normal;
+  word-break: keep-all;       /* 단어 중간에서 줄바꿈 방지 */
+  word-wrap: break-word;      /* 너무 길 경우 강제로 줄바꿈 */
+  max-width: 800px;           /* 이 값을 조절해서 줄바꿈 위치 조정 가능 */
+  line-height: 1.6;
+  text-align: center;
+}
+
+
+#chance {
+  font-size: 1rem;
+  margin: 0.5rem 0;
+}
+
+#startScreen,
+#result {
+  transition: opacity 0.3s ease-in-out;
+}

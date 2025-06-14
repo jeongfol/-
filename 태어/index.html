@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>다시 태어난다면?</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #262626;
+      color: #eaeaea;
+      font-family: 'Pretendard', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    /* 결과 요소 초기 상태: 투명도 0, 아래로 20px 이동 */
+    #result > * {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 600ms ease, transform 600ms ease;
+    }
+
+    /* visible 클래스 적용 시 투명도 1, 위치 원위치 */
+    #result.visible > * {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* 순차 애니메이션 딜레이 설정 */
+    #result.visible > *:nth-child(1) { transition-delay: 100ms; }
+    #result.visible > *:nth-child(2) { transition-delay: 300ms; }
+    #result.visible > *:nth-child(3) { transition-delay: 500ms; }
+    #result.visible > *:nth-child(4) { transition-delay: 700ms; }
+    #result.visible > *:nth-child(5) { transition-delay: 900ms; }
+
+    .hidden {
+      display: none !important;
+    }
+
+    button {
+      background: none;
+      color: #eaeaea;
+      border: 2px solid #eaeaea;
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="startScreen">
+    <h1>다시 태어난다면</h1>
+    <p>지구에는 정말 많은 나라들이 있습니다.<br>
+    현재 당신이 어느 나라에 사는지는 알 수 없지만<br>
+    다시 태어난다면 어느 나라에서 태어날지를 시험해봅시다</p>
+    <button id="startBtn">다시 태어나기</button>
+  </div>
+
+  <div id="result" class="hidden">
+    <img id="flag" src="" alt="국기" width="200">
+    <div id="countryName">국가 이름</div>
+    <div id="description">설명</div>
+    <div id="chance">확률</div>
+    <button id="retryBtn">다시 태어나기</button>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const startBtn = document.getElementById("startBtn");
+      const retryBtn = document.getElementById("retryBtn");
+      const startScreen = document.getElementById("startScreen");
+      const result = document.getElementById("result");
+      const flag = document.getElementById("flag");
+      const countryName = document.getElementById("countryName");
+      const description = document.getElementById("description");
+      const chance = document.getElementById("chance");
+
+      let countries = [];
+      fetch("data.json")
+        .then(res => res.json())
+        .then(data => countries = data);
+
+      function pickCountry() {
+        const total = countries.reduce((sum, c) => sum + c.probability, 0);
+        let rand = Math.random() * total;
+        for (const c of countries) {
+          if (rand < c.probability) return c;
+          rand -= c.probability;
+        }
+      }
+
+      function showCountry() {
+        const picked = pickCountry();
+        flag.src = `flags/${picked.code}.jpg`;
+        flag.alt = picked.name;
+        countryName.textContent = picked.name;
+
+        // 줄바꿈 문자를 <br>로 변환해 HTML 줄바꿈 처리 적용
+        description.innerHTML = picked.description.replace(/\n/g, "<br>");
+
+        chance.textContent = `이곳에 태어날 확률 ${picked.probability.toFixed(1)}%`;
+
+        result.classList.remove("hidden");
+        void result.offsetWidth;
+        result.classList.add("visible");
+      }
+
+      function resetAnimation() {
+        result.classList.add("hidden");
+        result.classList.remove("visible");
+        setTimeout(showCountry, 100);
+      }
+
+      startBtn.addEventListener("click", () => {
+        startScreen.classList.add("hidden");
+        setTimeout(showCountry, 1000);
+      });
+
+      retryBtn.addEventListener("click", resetAnimation);
+    });
+  </script>
+</body>
+</html>
