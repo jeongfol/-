@@ -9,6 +9,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const chance = document.getElementById("chance");
 
   let countries = [];
+  flag.onload = () => {
+  setTimeout(() => {
+    result.classList.remove("hidden");
+    void result.offsetWidth;
+    result.classList.add("visible");
+  }, 100); // 애니메이션 시작까지 약간의 지연 시간
+};
 
   fetch("data.json")
     .then(response => response.json())
@@ -24,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
       rand -= c.probability;
     }
   }
-
+  
   function showCountry() {
     const picked = pickCountry();
     flag.src = `flags/${picked.code}.jpg`;
